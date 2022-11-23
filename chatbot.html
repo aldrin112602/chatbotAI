@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" class="sr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | ChatBot</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Tangerine"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+      integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <ul class="nav justify-content-end py-4 px-3 shadow-lg">
+      <li class="nav-item mx-3">
+        <a href="#" class="nav-link text-white">Lorem ipsum</a>
+      </li>
+    </ul>
+    <section class="container-fluid overflow-hidden" style="position: relative;">
+      <img src="https://s3.eu-west-2.amazonaws.com/ubisend.website/assets/blog/AI-powered-chatbot.jpg" style="mix-blend-mode: multiply; position: absolute; top: 0; left: 0; z-index: -10;" width="100%" alt="">
+      <div class="row mt-5">
+        <div class="col-lg p-3" style="backdrop-filter: blur(20px); background-color: rgba(255, 255, 255, 0.01);">
+          <form action="#" class="">
+            <h1 class="mt-3">Lorem</h1>
+            <div class="container-fluid py-3"></div>
+            <div class="d-flex align-items-center justify-content-center">
+              <textarea class="form-control text-white" style="background-color: rgba(255, 255, 255, 0.01);" placeholder="Type here"></textarea>
+              <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg text-white p-3" style="position: relative">
+          <img
+            src="https://c4.wallpaperflare.com/wallpaper/176/250/573/blue-and-purple-sunset-wallpaper-preview.jpg"
+            width="100%"
+            alt=""
+            class="rounded shadow"
+            style="filter: brightness(50%) blur(2px) contrast(300%)"
+          />
+          <div
+            class="p-4 px-5 overflow-auto"
+            style="
+              height: 100%;
+              width: 100%;
+              top: 0;
+              left: 0;
+              position: absolute;
+            "
+            id="verse_con"
+          ></div>
+        </div>
+      </div>
+    </section>
+    <footer style="margin-top: -50px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path
+          fill="#f3f4f5"
+          fill-opacity="1"
+          d="M0,224L34.3,229.3C68.6,235,137,245,206,256C274.3,267,343,277,411,240C480,203,549,117,617,101.3C685.7,85,754,139,823,149.3C891.4,160,960,128,1029,128C1097.1,128,1166,160,1234,154.7C1302.9,149,1371,107,1406,85.3L1440,64L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"
+        ></path>
+      </svg>
+    </footer>
+    <script>
+      $(document).ready(() => {
+        //generate random bible verse
+        const generate = () => {
+          $.ajax({
+            url: "https://labs.bible.org/api/?passage=random&type=json&callback=myCallback",
+            crossDomain: true,
+            dataType: "jsonp",
+            success: function (res) {
+              let { bookname, chapter, text, verse } = res[0];
+              let template = `<h2 style=" font-family: 'Tangerine', serif; text-shadow: 1px 1px 0 #000;">${bookname} ${chapter}: ${verse}<br><span id="text" style=" font-family: 'Tangerine', serif; text-shadow: 1px 1px 0 #000;"></span></h2>`;
+              $("#verse_con").html(template);
+              var i = 0;
+              var txt = ` - ${text}`;
+              var speed = 30;
+
+              function typeWriter() {
+                if (i < txt.length) {
+                  document.getElementById("text").innerHTML += txt.charAt(i);
+                  i++;
+                  setTimeout(typeWriter, speed);
+                }
+              }
+              typeWriter();
+            },
+          });
+        };
+        generate();
+        setInterval(() => {
+          generate();
+        }, 15000);
+      });
+    </script>
+  </body>
+</html>
