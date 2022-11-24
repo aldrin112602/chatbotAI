@@ -1,36 +1,96 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Mukta:wght@300&family=Open+Sans&family=Poppins:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&family=Mukta:wght@300&family=Open+Sans&family=Poppins:wght@300;400&display=swap");
 * {
-    padding: 0px;
-    margin: 0px;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 body {
-    background-image: linear-gradient(45deg, #7EC8E3, #0000FF, #050A30);
-    min-height: 100vh;
+  background-image: linear-gradient(45deg, #7ec8e3, #0000ff, #050a30);
+  min-height: 100vh;
 }
 
 html.sr .load-hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
+
 @keyframes float {
-	0% {
-		transform: translatey(0px);
-	}
-	50% {
-		transform: translatey(-20px);
-	}
-	100% {
-		transform: translatey(0px);
-	}
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
 }
 
 #float-img {
-    animation: float 5s ease-in-out infinite;
+  animation: float 5s ease-in-out infinite;
 }
 footer {
-    animation: float 10s ease-in-out infinite;
+  animation: float 10s ease-in-out infinite;
 }
 .col-2 {
-    animation: float 8s ease-in-out infinite;
+  animation: float 8s ease-in-out infinite;
+}
+.msg {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  margin: 10px 0;
+}
+.user-msg {
+  display: flex;
+  /* justify-content: flex-end !important; */
+  flex-direction: row-reverse !important;
+  flex: 1;
+  margin-left: 0;
+  max-width: 100%;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.user-msg p {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px 0 5px 5px;
+  max-width: 80%;
+  word-wrap: break-word;
+  word-break: break-all;
+  margin: 0 10px;
+  margin-top: 40px;
+  color: #000;
+}
+.msg p {
+  background: #050a30;
+  padding: 20px;
+  border-radius: 0 5px 5px 5px;
+  max-width: 80%;
+  word-wrap: break-word;
+  word-break: break-all;
+  margin: 0 10px;
+  margin-top: 40px;
+}
+
+footer {
+  z-index: -10;
+}
+
+body::-webkit-scrollbar, textarea::-webkit-scrollbar {
+  width: 0;
+}
+
+#msg-con::-webkit-scrollbar {
+    width: 1em;
+}
+
+#msg-con::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+#msg-con::-webkit-scrollbar-thumb {
+  background-color:rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
 }
