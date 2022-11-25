@@ -94,19 +94,18 @@ $(document).ready(() => {
   $("#submit_btn").on("click", () => {
     let input = $("textarea").val().trim().toLowerCase().split(" ");
 
-    // trace the name from input
     let isFound =
       input.indexOf(`im`) >= 0
         ? input.indexOf(`im`)
-        : input.indexOf(`i'm`) >= 0
+        : (input.indexOf(`i'm`) >= 0
         ? input.indexOf(`i'm`)
-        : input.indexOf(`i am`) >= 0
+        : (input.indexOf(`i am`) >= 0
         ? input.indexOf(`i am`)
-        : $("textarea").val().trim().toLowerCase().match("my name is")
+        : ($("textarea").val().trim().toLowerCase().match("my name is")
         ? input.indexOf("is")
-        : false;
-
-    if (isFound && !name) {
+        : false)));
+    
+    if (isFound >= 0 && typeof isFound != "boolean" && !name) {
       name = input[isFound + 1];
 
       // push new message
@@ -115,22 +114,63 @@ $(document).ready(() => {
         createMsg(msg[msg.length - 1]);
       }, 2000);
     } else {
-      // check if name already provided then proceed to the next question
       if (name) {
-        msg.push(
-          `Wow! thats great ${name}! Can you tell me more about yourself?`
-        );
+        // check if name already provided then proceed to the next question
+        const msgIncludes = (_msg) => {
+          if (!msg.includes(_msg)) {
+            msg.push(_msg);
+            setTimeout(() => {
+              createMsg(msg[msg.length - 1]);
+            }, 2000);
+          } else {
+          }
+        };
+        msgIncludes(`Wow! thats great ${name}!`);
         setTimeout(() => {
-          createMsg(msg[msg.length - 1]);
+          msgIncludes(
+            `Uhmm.. ${name} I have something to share with you. Do you want to know it?`
+          );
         }, 2000);
+        let _msg = input.join("").toLowerCase();
+        if (/ye/i.test(_msg) || /sure/i.test(_msg) || /ok/i.test(_msg)) {
+          msgIncludes(
+            `You know ${name}, God is always ready to listen anytime you are ready to talk to him. Prayer is simply talking with God`
+          );
+
+          setTimeout(() => {
+            msgIncludes(
+              `Talk with God, no breath is lost. Walk with God, no strength is lost. Wait for God, no time is lost. Trust in God, you will never be lost`
+            );
+
+            setTimeout(() => {
+              msgIncludes(
+                `Bible says on 2 Corinthians 1:3 “Blessed be the God and Father of our Lord Jesus Christ, the Father of mercies and God of all comfort.”`
+              );
+              setTimeout(() => {
+                msgIncludes(
+                  `You know ${name}, we are not born on this earth to eat and sleep. We are here to to serve our God, our savior and our Lord`
+                );
+
+                setTimeout(() => {
+                  msgIncludes(
+                    `You know every one of us have different problems, different situations but bible says on 1 Corinthians 10: 13,  “There hath no temptation taken you but such as is common to man: but God is faithful, who will not suffer you to be tempted above that ye are able; but will with the temptation also make a way to escape, that ye may be able to bear it.”`
+                  );
+                }, 4000);
+              }, 4000);
+            }, 4000);
+          }, 2000);
+        }
       } else {
         // if name is not provided, push new message
-        msg.push(`Sorry what's your name again?`);
-        setTimeout(() => {
-          createMsg(msg[msg.length - 1]);
-        }, 2000);
+        if(!name && $('textarea').val()) {
+          msg.push(`Sorry what's your name again?`);
+          setTimeout(() => {
+            createMsg(msg[msg.length - 1]);
+          }, 2000);
+        }
       }
     }
+    $("textarea").focus();
   });
 
   // Generate reply
@@ -143,5 +183,7 @@ $(document).ready(() => {
     }
   }
 
-  startConversation();
+  setTimeout(() => {
+    startConversation();
+  }, 1000);
 });
