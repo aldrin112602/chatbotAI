@@ -83,6 +83,7 @@ $(document).ready(() => {
     $("#msg-con").append(div);
     scroll();
   };
+
   // AI messages
   let msg = [
     "Hello I'm a Chatbot AI, I'm here to help you. How was your day? I hope you're good.",
@@ -91,22 +92,62 @@ $(document).ready(() => {
 
   let name = null;
 
+  const clickOption = function () {
+    $("textarea").val(this.innerHTML);
+    $("#submit_btn").click();
+    this.parentElement.parentElement.style.pointerEvents = "none";
+  };
+
+  const createOptions = (options) => {
+    // exepct that the option is a string
+    let opts = options.split(",");
+    let div = document.createElement("div");
+
+    div.setAttribute(
+      "class",
+      "d-flex aign-items-center justify-content-center flex-wrap flex-direction-column p-3"
+    );
+    opts.forEach((v) => {
+      let btn = document.createElement("button");
+      btn.setAttribute("class", "btn btn-light btn-block mx-3 my-1");
+      btn.setAttribute("type", "button");
+      btn.innerHTML = v;
+      btn.addEventListener("click", clickOption);
+      let div_btn_con = document.createElement("div");
+      div_btn_con.setAttribute("class", "d-grid");
+      div_btn_con.appendChild(btn);
+      div.appendChild(div_btn_con);
+    });
+
+    $("#msg-con").append(div);
+    scroll();
+  };
+
+  const _createOptions = (options) => {
+    setTimeout(() => {
+      if (!msg.includes(options)) {
+        msg.push(options);
+        createOptions(options);
+      }
+    }, 3000);
+  };
+
   $("#submit_btn").on("click", () => {
     let input = $("textarea").val().trim().toLowerCase().split(" ");
 
     let isFound =
       input.indexOf(`im`) >= 0
         ? input.indexOf(`im`)
-        : (input.indexOf(`i'm`) >= 0
+        : input.indexOf(`i'm`) >= 0
         ? input.indexOf(`i'm`)
-        : (input.indexOf(`i am`) >= 0
+        : input.indexOf(`i am`) >= 0
         ? input.indexOf(`i am`)
-        : ($("textarea").val().trim().toLowerCase().match("my name is")
+        : $("textarea").val().trim().toLowerCase().match("my name is")
         ? input.indexOf("is")
-        : false)));
-    
+        : false;
+
     if (isFound >= 0 && typeof isFound != "boolean" && !name) {
-      name = input[isFound + 1];
+      name = input[isFound + 1].split('').map((l, i) => (i == 0) ? l.toUpperCase() : l).join('');
 
       // push new message
       msg.push(`Hello ${name}, nice meeting you! How are doing?`);
@@ -126,15 +167,28 @@ $(document).ready(() => {
           }
         };
         msgIncludes(`Wow! thats great ${name}!`);
+
+        setTimeout(() => {
+          msgIncludes(`in case you need this words or verse`);
+        }, 2000);
+
         setTimeout(() => {
           msgIncludes(
             `Uhmm.. ${name} I have something to share with you. Do you want to know it?`
           );
-        }, 2000);
+
+          _createOptions("YES, SOMETHING ELSE");
+        }, 5000);
+
         let _msg = input.join("").toLowerCase();
-        if (/ye/i.test(_msg) || /sure/i.test(_msg) || /ok/i.test(_msg)) {
+        if (
+          (/ye/i.test(_msg) || /sure/i.test(_msg) || /ok/i.test(_msg)) &&
+          $("textarea").val().toLowerCase().trim() != "yes!" && 
+          $("textarea").val().toLowerCase().trim() != "sure!"
+        ) {
           msgIncludes(
-            `You know ${name}, God is always ready to listen anytime you are ready to talk to him. Prayer is simply talking with God`
+            `
+            You know ${name}, God is always ready to listen anytime you are ready to talk to him. Prayer is simply talking with God`
           );
 
           setTimeout(() => {
@@ -155,18 +209,120 @@ $(document).ready(() => {
                   msgIncludes(
                     `You know every one of us have different problems, different situations but bible says on 1 Corinthians 10: 13,  “There hath no temptation taken you but such as is common to man: but God is faithful, who will not suffer you to be tempted above that ye are able; but will with the temptation also make a way to escape, that ye may be able to bear it.”`
                   );
+                  setTimeout(() => {
+                    msgIncludes(`Today, these are God's chosen words for you. This might be the word you're looking for and needs to read right now. 
+                    `);
+                  }, 5000);
                 }, 4000);
               }, 4000);
             }, 4000);
           }, 2000);
+        } else {
+          switch ($("textarea").val().toLowerCase().trim()) {
+            case "something else":
+              setTimeout(() => {
+                msgIncludes(
+                  `I think you came here for a reason. How can I help you? You can choose an answer below. `
+                );
+                _createOptions(
+                  "STAY POSITVE, REFRAME THOUGHTS, TRY SOMETHING ELSE"
+                );
+              }, 2000);
+              break;
+
+            case "stay positve":
+              setTimeout(() => {
+                msgIncludes(`Okay`);
+                setTimeout(() => {
+                  msgIncludes(
+                    `Clear your mind and try to think of the positve things in your life right now.`
+                  );
+                  setTimeout(() => {
+                    msgIncludes(
+                      `Tell me the first thing that come into your mind, ${name}.`
+                    );
+                    _createOptions("EXAMPLE?");
+                  }, 3000);
+                }, 2000);
+              }, 1000);
+              break;
+            case "example?":
+              setTimeout(() => {
+                msgIncludes(
+                  `Gratittude helps us shift our focus to the silver lining that we've got in our lives.`
+                );
+                setTimeout(() => {
+                  msgIncludes(
+                    `For example, being grateful for even a simple, everyday thing living like food we eat or the place we live in, can vastly improve our daily outlook.`
+                  );
+                  setTimeout(() => {
+                    msgIncludes(`Would you like to try this and see?`);
+                    _createOptions("Yes!, Not now");
+                  }, 3000);
+                }, 2000);
+              }, 1000);
+              break;
+            case 'yes!':
+              setTimeout(() => {
+                msgIncludes(`Alright!`);
+                setTimeout(() => {
+                  msgIncludes(
+                    `${name}, tell me, what's something that you feel appreciated of?`
+                  );
+                }, 2000);
+              }, 1000);
+              break;
+
+            case 'not now':
+              setTimeout(() => {
+                msgIncludes(`Alright!`);
+                setTimeout(() => {
+                  msgIncludes(
+                    `So any way ${name}, How can I help you?`
+                  );
+                }, 2000);
+              }, 1000);
+              break;
+            case 'reframe thoughts':
+              setTimeout(() => {
+               msgIncludes(`We're going to look at some of your thoughts that cause stress, and try to replace them with more useful thoughts.`);
+               
+               setTimeout(() => {
+                msgIncludes(`This is like a mind gym and we're now on session no. 1! Ready to start?`);
+                
+                _createOptions('Sure!, How does this work?');
+               }, 2000);
+              }, 1000);
+              break;
+            case 'sure!':
+              setTimeout(() => {
+               msgIncludes(`Tell me about a situation that upset you recently.`);
+               
+               setTimeout(() => {
+                msgIncludes(`Something that stayed in your mind long after it was over.`);
+                
+               }, 2000);
+              }, 1000);
+              
+              break;
+            default:
+              /*setTimeout(() => {
+               msgIncludes(`What other things are you grateful for in your life right now?`);
+                _createOptions("Nothing!, That's it");
+               }, 3000);*/
+              console.log('default')
+              break;
+          }
         }
       } else {
         // if name is not provided, push new message
-        if(!name && $('textarea').val()) {
+        if (!name && $("textarea").val()) {
           msg.push(`Sorry what's your name again?`);
           setTimeout(() => {
             createMsg(msg[msg.length - 1]);
           }, 2000);
+        } else {
+          
         }
       }
     }
